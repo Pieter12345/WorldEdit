@@ -159,21 +159,16 @@ public class ForgeWorld extends AbstractWorld {
         boolean successful = successState != null;
 
         // Create the TileEntity
-        if (successful) {
-            if (block.hasNbtData()) {
-                // Kill the old TileEntity
-                world.removeTileEntity(pos);
-                NBTTagCompound nativeTag = NBTConverter.toNative(block.getNbtData());
+        if (successful || old == newState) {
+            CompoundTag tag = ((BaseBlock) block).getNbtData();
+            if (tag != null) {
+                NBTTagCompound nativeTag = NBTConverter.toNative(tag);
                 nativeTag.setString("id", block.getNbtId());
                 TileEntityUtils.setTileEntity(world, position, nativeTag);
             }
         }
 
-        if (notifyAndLight) {
-            if (!successful) {
-                newState = old;
-            }
-            world.checkLight(pos);
+        if (successful && notifyAndLight) {
             world.markAndNotifyBlock(pos, chunk, old, newState, UPDATE | NOTIFY);
         }
 
