@@ -84,6 +84,7 @@ final class TileEntityUtils {
             tileEntity.readFromNBT(tag);
         }
 
+        tileEntity.setWorldObj(world);
         world.setTileEntity(new BlockPos(position.getBlockX(), position.getBlockY(), position.getBlockZ()), tileEntity);
     }
 
