@@ -98,10 +98,19 @@ final class TileEntityUtils {
      */
     static void setTileEntity(World world, Vector position, @Nullable NBTTagCompound tag) {
         if (tag != null) {
+            BlockPos pos = new BlockPos(position.getBlockX(), position.getBlockY(), position.getBlockZ());
+
+            // Remove potentially existing TileEntity. This is necessary because the old invalidated TileEntity can
+            // cause the newly set TileEntity to be removed from the world.
+            world.removeTileEntity(pos);
+
+            // Create and load the new TileEntity.
             updateForSet(tag, position);
             TileEntity tileEntity = TileEntity.createAndLoadEntity(tag);
+
+            // Set the new TileEntity.
             if (tileEntity != null) {
-                world.setTileEntity(new BlockPos(position.getBlockX(), position.getBlockY(), position.getBlockZ()), tileEntity);
+                world.setTileEntity(pos, tileEntity);
             }
         }
     }
