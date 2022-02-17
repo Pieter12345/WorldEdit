@@ -31,7 +31,7 @@ final class PacketHandlerUtil {
 
     static NetworkRegistry.ChannelBuilder buildLenientHandler(String id, int protocolVersion) {
         final String verStr = Integer.toString(protocolVersion);
-        final Predicate<String> validator = validateLenient(verStr);
+        final Predicate<String> validator = (version) -> true; // validateLenient(verStr);
         return NetworkRegistry.ChannelBuilder
                 .named(new ResourceLocation(ForgeWorldEdit.MOD_ID, id))
                 .clientAcceptedVersions(validator)
